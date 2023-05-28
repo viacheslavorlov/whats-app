@@ -1,0 +1,17 @@
+.starIcon {
+    stroke: var(--primary-color);
+    fill: none;
+    cursor: pointer;
+}
+
+.normal {
+    fill: none;
+}
+
+.hovered {
+    fill: var(--primary-color);
+}
+
+.isSelected {
+    cursor: default;
+}

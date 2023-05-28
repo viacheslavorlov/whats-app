@@ -1,0 +1,19 @@
+.items {
+    background: var(--card-bg);
+    position: absolute;
+    z-index: 103;
+    border-radius: 8px;
+    border: 1px solid var(--primary-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.item {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--primary-color);
+    outline: none;
+}

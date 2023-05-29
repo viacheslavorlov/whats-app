@@ -18,8 +18,11 @@
     "not dead"
   ],
   "dependencies": {
+    "@green-api/whatsapp-api-client": "^0.3.35",
     "@headlessui/react": "^1.7.14",
     "@reduxjs/toolkit": "^1.8.0",
+    "axios": "^1.4.0",
+    "fs": "^0.0.1-security",
     "react": "^18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",

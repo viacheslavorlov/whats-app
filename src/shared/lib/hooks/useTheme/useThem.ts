@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { LOCAL_STORAGE_THEME_KEY } from '@/shared/const/localStorage/localStorage';
-import { Theme } from '../../../const/theme/themeConst';
+import { LOCAL_STORAGE_THEME_KEY } from 'shared/const/localStorage/localStorage';
+import { Theme } from 'shared/const/theme/themeConst';
 import { ThemeContext } from '../../context/ThemeContext';
 
 interface UseThemResult {
@@ -17,9 +17,6 @@ export function useTheme(): UseThemResult {
             newTheme = Theme.DARK;
             break;
         case Theme.DARK:
-            newTheme = Theme.ORANGE;
-            break;
-        case Theme.ORANGE:
             newTheme = Theme.LIGHT;
             break;
         default:

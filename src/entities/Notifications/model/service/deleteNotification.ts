@@ -1,9 +1,9 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {apiTokenInstance, idInstance} from 'entities/AccountSettings';
-import {NotificationData} from 'entities/Notifications/model/type/NotificationsShema';
+import {NotificationData} from '../type/NotificationsShema';
 
-export const fetchNotification = createAsyncThunk(
+export const deleteNotification = createAsyncThunk(
     'fetchNotifications',
     async (receiptId, thunkAPI) => {
         try {

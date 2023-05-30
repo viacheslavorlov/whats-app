@@ -1,9 +1,9 @@
 import {AccountSettingsSchema} from 'entities/AccountSettings';
-import {MessageSliceShema} from 'entities/Message/model/type/MessageShema';
-import {NotificationsSchema} from 'entities/Notifications/model/type/NotificationsShema';
+import {MessageSliceShema} from 'entities/Message';
+import {rtkApi} from 'shared/api/rtkApi';
 
 export interface StateSchema {
     message: MessageSliceShema
-    notifications: NotificationsSchema;
     accountSettings: AccountSettingsSchema;
+    [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>
 }

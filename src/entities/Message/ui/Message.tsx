@@ -1,15 +1,11 @@
-import {
-    getMessageError,
-    getMessageLoading,
-    getMessageSelector
-} from 'entities/Message/model/selectors/messageSelectors';
-import {sendMessage} from 'entities/Message/model/service/sendMessage';
-import {messageActions} from 'entities/Message/model/slice/MessageSlice';
 import {ChangeEvent, memo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {classNames} from 'shared/lib/classNames/classNames';
 import {Button} from 'shared/ui/Button';
-import {HStack} from 'shared/ui/Stack';
+import {HStack, VStack} from 'shared/ui/Stack';
+import {getMessageError, getMessageLoading, getMessageSelector,} from '../model/selectors/messageSelectors';
+import {sendMessage} from '../model/service/sendMessage';
+import {messageActions} from '../model/slice/MessageSlice';
 import cls from './Message.module.scss';
 
 interface MessageProps {
@@ -39,11 +35,14 @@ export const Message = memo((props: MessageProps) => {
     };
 
     return (
-        <HStack max justify={'center'} align={'center'} className={classNames(cls.Message, {}, [className])}>
+        <VStack max justify={'center'} align={'center'} className={classNames(cls.Message, {}, [className])}>
             <input type="text" placeholder={'Введите номер абонента'} value={number} onChange={onChangeNumber}/>
-            <textarea placeholder={'Введите сообщение'} value={messageData.message} onChange={onHandleText}
-                      className={cls.textarea}/>
+            <textarea
+                placeholder={'Введите сообщение'}
+                value={messageData.message}
+                onChange={onHandleText}
+                className={cls.textarea}/>
             <Button onClick={onSendMessage}>Send</Button>
-        </HStack>
+        </VStack>
     );
 });

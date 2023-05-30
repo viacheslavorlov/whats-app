@@ -9,6 +9,9 @@ export interface MessageSchema {
 export interface ResponseSchema {
     idMessage: string;
 }
+export interface DeleteResponse {
+    result: boolean;
+}
 
 export interface MessageSliceShema {
     isLoading: boolean;

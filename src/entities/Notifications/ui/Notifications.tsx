@@ -1,8 +1,7 @@
-import {fetchNotification} from 'entities/Notifications/model/service/fetchNotification';
-import {useDispatch} from 'react-redux';
-import {classNames} from 'shared/lib/classNames/classNames';
-import cls from './Notifications.module.scss';
 import {memo, useEffect} from 'react';
+import {classNames} from 'shared/lib/classNames/classNames';
+import {useDeleteNotificationMutation, useGetNotificationQuery} from '../model/service/fetchNotification';
+import cls from './Notifications.module.scss';
 
 interface NotificationsProps {
     className?: string;
@@ -12,15 +11,33 @@ export const Notifications = memo((props: NotificationsProps) => {
     const {
         className
     } = props;
-    const dispatch = useDispatch();
+    const {data, isLoading, error, refetch} = useGetNotificationQuery({
+        pollingInterval: 3000
+    });
+    const [deleteNotification, result] = useDeleteNotificationMutation();
 
     useEffect(() => {
-        dispatch(fetchNotification());
-    }, [])
+        refetch();
+    }, [refetch])
+
+    if (data === null) {
+        return (
+            <div className={classNames(cls.Notifications, {}, [className])}>
+                Нет новых уведомлений
+            </div>
+        )
+    }
+
+    const text = data?.body?.messageData?.extendedTextMessageData?.text || '';
 
     return (
-        <div className={classNames(cls.Notifications, {}, [className])}>
-
+        <div
+            onClick={()=> {
+                refetch()
+                deleteNotification(data.receiptId)
+            }}
+            className={classNames(cls.Notifications, {}, [className])}>
+            {text || ''}
         </div>
     );
 });

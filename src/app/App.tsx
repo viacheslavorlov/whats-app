@@ -1,5 +1,5 @@
-import {Message} from 'entities/Message/ui/Message';
-import {Notifications} from 'entities/Notifications/ui/Notifications';
+import {Message} from 'entities/Message';
+import {Notifications} from 'entities/Notifications';
 import {SideBar} from 'shared/ui/SideBar';
 import {HStack} from 'shared/ui/Stack';
 import {Header} from 'wigets/Header';

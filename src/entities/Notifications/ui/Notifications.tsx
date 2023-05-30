@@ -1,33 +1,43 @@
-import {useLiveQuery} from 'dexie-react-hooks';
-import {useDeleteNotificationMutation} from 'entities/Notifications/model/service/deleteNotification';
-import {memo} from 'react';
-import {db} from 'shared/db';
-import {classNames} from 'shared/lib/classNames/classNames';
+import {getNotifications} from 'entities/Notifications/model/selectors/notificationSelector';
+import {notificationActions} from 'entities/Notifications/model/slice/notificationSlice';
+import {useDispatch, useSelector} from 'react-redux';
 import {useGetNotificationQuery} from '../model/service/fetchNotification';
+import {memo, useEffect, useState} from 'react';
+import {classNames} from 'shared/lib/classNames/classNames';
+import {useDeleteNotificationMutation} from '../model/service/deleteNotification';
+// import {useGetNotificationQuery} from '../model/service/fetchNotification';
 import cls from './Notifications.module.scss';
 
 interface NotificationsProps {
     className?: string;
 }
 
+export interface Message {
+    receiptId: number,
+    body: any;
+}
+
 export const Notifications = memo((props: NotificationsProps) => {
     const {
         className
     } = props;
+    const dispatch = useDispatch();
+    const messages = useSelector(getNotifications)
+    const {data, isSuccess, refetch} = useGetNotificationQuery(null, {});
 
-    const messages = useLiveQuery(() => db.notifications.toArray());
-    const {data: notfication, isSuccess, error} = useGetNotificationQuery(null, {
-        pollingInterval: 10000
-    });
     const [deleteNotification] = useDeleteNotificationMutation();
-    if (isSuccess && notfication) {
-        db.notifications.add(notfication);
-    }
+    useEffect(() => {
+        if (data){
+            dispatch(notificationActions.addNotification(data))
+            deleteNotification(data.receiptId)
+            refetch()
+        }
+    }, [data, deleteNotification, dispatch, refetch])
     return (
         <div
-            onClick={() => deleteNotification(Number(notfication.receiptId))}
-            className={classNames(cls.Notifications, {}, [className])}>
-            {notfication?.messageData?.extendedTextMessageData?.text || ''}
+            className={classNames(cls.Notifications, {}, [className])}
+            onClick={() => deleteNotification(Number(data.receiptId))}>
+            {messages.map(msg => <div key={msg.receiptId}>{msg.receiptId}{msg.body.messageData?.extendedTextMessageData?.text}</div>)}
         </div>
     );
 });

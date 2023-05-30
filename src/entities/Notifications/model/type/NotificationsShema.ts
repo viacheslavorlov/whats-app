@@ -1,3 +1,5 @@
+import {Message} from 'entities/Notifications/ui/Notifications';
+
 export interface NotificationData {
     receiptId: number,
     body: {
@@ -17,11 +19,15 @@ export interface NotificationData {
         },
         messageData?: {
             typeMessage: string,
-            textMessageData: {
-                textMessage: string
+            textMessageData?: {
+                textMessage?: string
             }
         }
     };
+}
+
+export interface NotificationSliceShema {
+    notifications: Message[]
 }
 
 const data = {

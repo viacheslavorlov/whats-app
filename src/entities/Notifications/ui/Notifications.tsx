@@ -1,6 +1,9 @@
-import {memo, useEffect} from 'react';
+import {useLiveQuery} from 'dexie-react-hooks';
+import {useDeleteNotificationMutation} from 'entities/Notifications/model/service/deleteNotification';
+import {memo} from 'react';
+import {db} from 'shared/db';
 import {classNames} from 'shared/lib/classNames/classNames';
-import {useDeleteNotificationMutation, useGetNotificationQuery} from '../model/service/fetchNotification';
+import {useGetNotificationQuery} from '../model/service/fetchNotification';
 import cls from './Notifications.module.scss';
 
 interface NotificationsProps {
@@ -11,33 +14,20 @@ export const Notifications = memo((props: NotificationsProps) => {
     const {
         className
     } = props;
-    const {data, isLoading, error, refetch} = useGetNotificationQuery({
-        pollingInterval: 3000
+
+    const messages = useLiveQuery(() => db.notifications.toArray());
+    const {data: notfication, isSuccess, error} = useGetNotificationQuery(null, {
+        pollingInterval: 10000
     });
-    const [deleteNotification, result] = useDeleteNotificationMutation();
-
-    useEffect(() => {
-        refetch();
-    }, [refetch])
-
-    if (data === null) {
-        return (
-            <div className={classNames(cls.Notifications, {}, [className])}>
-                Нет новых уведомлений
-            </div>
-        )
+    const [deleteNotification] = useDeleteNotificationMutation();
+    if (isSuccess && notfication) {
+        db.notifications.add(notfication);
     }
-
-    const text = data?.body?.messageData?.extendedTextMessageData?.text || '';
-
     return (
         <div
-            onClick={()=> {
-                refetch()
-                deleteNotification(data.receiptId)
-            }}
+            onClick={() => deleteNotification(Number(notfication.receiptId))}
             className={classNames(cls.Notifications, {}, [className])}>
-            {text || ''}
+            {notfication?.messageData?.extendedTextMessageData?.text || ''}
         </div>
     );
 });

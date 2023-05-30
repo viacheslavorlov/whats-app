@@ -1,6 +1,6 @@
 // https://api.green-api.com/waInstance{{idInstance}}/receiveNotification/{{apiTokenInstance}}
 import {apiTokenInstance, idInstance} from 'entities/AccountSettings';
-import {DeleteResponse} from 'entities/Message';
+import {NotificationData} from 'entities/Notifications/model/type/NotificationsShema';
 import {rtkApi} from 'shared/api/rtkApi';
 
 // export const fetchNotification = createAsyncThunk(
@@ -23,15 +23,12 @@ import {rtkApi} from 'shared/api/rtkApi';
 const fetchNotification = rtkApi.injectEndpoints({
     endpoints: build => ({
         getNotification: build.query({
-            query: () => `waInstance${idInstance}/receiveNotification/${apiTokenInstance}`
-        }),
-        deleteNotification: build.mutation<DeleteResponse, number>({
-            query: (receiptId) => ({
-                url: `waInstance${idInstance}/deleteNotification/${apiTokenInstance}/${receiptId}`,
-                method: 'DELETE'
-            })
+            query: () => ({
+                url: `waInstance${idInstance}/receiveNotification/${apiTokenInstance}`,
+
+            }),
         })
     })
 });
 
-export const {useGetNotificationQuery, useDeleteNotificationMutation} = fetchNotification;
+export const {useGetNotificationQuery} = fetchNotification;

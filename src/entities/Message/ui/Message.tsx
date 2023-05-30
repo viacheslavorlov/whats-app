@@ -1,3 +1,4 @@
+import {useGetNotificationQuery} from 'entities/Notifications/model/service/fetchNotification';
 import {ChangeEvent, memo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {classNames} from 'shared/lib/classNames/classNames';
@@ -28,10 +29,12 @@ export const Message = memo((props: MessageProps) => {
     const onChangeNumber = (e: ChangeEvent<HTMLInputElement>) => {
         setNumber(e.target.value);
     };
+    const {refetch} = useGetNotificationQuery(null, {})
 
     const onSendMessage = () => {
         dispatch(sendMessage({message: messageData.message, chatId: `${number}@c.us`}));
         dispatch(messageActions.clearMessageText());
+        refetch()
     };
 
     return (

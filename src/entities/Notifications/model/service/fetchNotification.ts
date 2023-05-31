@@ -29,6 +29,43 @@ const fetchNotification = rtkApi.injectEndpoints({
             query: () => ({
                 url: `waInstance${idInstance}/receiveNotification/${apiTokenInstance}`,
             }),
+            transformResponse: (ressponse) => {
+                let message, timestamp, senderData;
+                // @ts-ignore
+                if (!ressponse.body.typeWebhook.match('API')) {
+                    // @ts-ignore
+                    message = ressponse.body.messageData.textMessageData.textMessage;
+                    // @ts-ignore
+                    timestamp = ressponse.body.timestamp;
+                    senderData = {
+                        // @ts-ignore
+                        sender: ressponse.body.senderData.sender,
+                        // @ts-ignore
+                        senderName: ressponse.body.senderData.senderName
+                    };
+                    return {// @ts-ignore
+                        receiptId: ressponse.receiptId,
+                        message,
+                        timestamp,
+                        senderData
+                    };
+                } else {// @ts-ignore
+                    message = ressponse.body.messageData.textMessageData.textMessage;
+                    // @ts-ignore
+                    timestamp = ressponse.body.timestamp;
+                    senderData = {// @ts-ignore
+                        sender: ressponse.body.senderData.sender,
+                        // @ts-ignore
+                        senderName: ressponse.body.senderData.senderName
+                    };
+                    return {// @ts-ignore
+                        receiptId: ressponse.receiptId,
+                        message,
+                        timestamp,
+                        senderData
+                    };
+                }
+            }
         })
     })
 });

@@ -1,10 +1,10 @@
 import {getNotifications} from 'entities/Notifications/model/selectors/notificationSelector';
 import {notificationActions} from 'entities/Notifications/model/slice/notificationSlice';
+import {memo, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useGetNotificationQuery} from '../model/service/fetchNotification';
-import {memo, useEffect, useState} from 'react';
 import {classNames} from 'shared/lib/classNames/classNames';
 import {useDeleteNotificationMutation} from '../model/service/deleteNotification';
+import {useGetNotificationQuery} from '../model/service/fetchNotification';
 // import {useGetNotificationQuery} from '../model/service/fetchNotification';
 import cls from './Notifications.module.scss';
 
@@ -36,8 +36,13 @@ export const Notifications = memo((props: NotificationsProps) => {
     return (
         <div
             className={classNames(cls.Notifications, {}, [className])}
-            onClick={() => deleteNotification(Number(data.receiptId))}>
-            {messages.map(msg => <div key={msg.receiptId}>{msg.receiptId}{msg.body.messageData?.extendedTextMessageData?.text}</div>)}
+            onClick={() => deleteNotification(Number(data?.receiptId))}>
+            {messages.map(msg => (
+                <div key={msg.receiptId}>
+                    {msg.receiptId}
+                    {msg.body.messageData?.extendedTextMessageData?.text}
+                </div>
+            ))}
         </div>
     );
 });

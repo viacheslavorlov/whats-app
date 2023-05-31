@@ -1,6 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchAccountSettings} from 'entities/AccountSettings/model/service/fetchAccountSettings';
-import {AccountSettingsSchema} from 'entities/AccountSettings/model/type/AccountSettingsShema';
+import { fetchAccountSettings } from '../service/fetchAccountSettings';
+import { AccountSettingsSchema } from '../type/AccountSettingsShema';
+
 
 const initialState: AccountSettingsSchema = {
     isLoading: false,

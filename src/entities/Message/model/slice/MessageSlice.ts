@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {MessageSliceShema} from 'entities/Message/model/type/MessageShema';
+import {MessageSliceShema} from '/entities/Message';
 import {sendMessage} from '../service/sendMessage';
 
 const initialState: MessageSliceShema = {

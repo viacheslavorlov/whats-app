@@ -5,7 +5,7 @@ const initialState: NotificationSliceShema = {
 }
 
 const notificationSlice = createSlice({
-    name: 'notificztions',
+    name: 'notifications',
     initialState,
     reducers: {
         addNotification: (state, action) => {

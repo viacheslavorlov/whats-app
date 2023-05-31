@@ -3,7 +3,7 @@ import {ChangeEvent, memo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {classNames} from 'shared/lib/classNames/classNames';
 import {Button} from 'shared/ui/Button';
-import {HStack, VStack} from 'shared/ui/Stack';
+import { VStack} from 'shared/ui/Stack';
 import {getMessageError, getMessageLoading, getMessageSelector,} from '../model/selectors/messageSelectors';
 import {sendMessage} from '../model/service/sendMessage';
 import {messageActions} from '../model/slice/MessageSlice';

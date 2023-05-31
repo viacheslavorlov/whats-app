@@ -3,10 +3,12 @@ import {StateSchema} from 'app/store/types/StateSchema';
 import {accountSettingsReducer} from 'entities/AccountSettings';
 import {messageReducer} from 'entities/Message';
 import {notificationReducer} from 'entities/Notifications/model/slice/notificationSlice';
+import {authReducer} from 'features/Authorisation/model/slice/AuthorisationSlice';
 import {rtkApi} from 'shared/api/rtkApi';
 
 const combinedReducer = combineReducers<StateSchema>({
     message: messageReducer,
+    authorisation: authReducer,
     notifications: notificationReducer,
     accountSettings: accountSettingsReducer,
     [rtkApi.reducerPath]: rtkApi.reducer

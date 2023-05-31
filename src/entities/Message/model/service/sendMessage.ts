@@ -1,7 +1,7 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
-import {idInstance, apiTokenInstance} from 'entities/AccountSettings/model/const/constID';
-import {MessageSchema, ResponseSchema} from 'entities/Message/model/type/MessageShema';
+import {idInstance, apiTokenInstance} from 'entities/AccountSettings';
+import {MessageSchema, ResponseSchema} from 'entities/Message';
 
 export const sendMessage = createAsyncThunk<ResponseSchema, MessageSchema>(
     'sendMessage',

@@ -1,5 +1,3 @@
-import {Message} from 'entities/Notifications/ui/Notifications';
-
 export interface NotificationData {
     receiptId: number,
     body: {
@@ -22,7 +20,21 @@ export interface NotificationData {
             textMessageData?: {
                 textMessage?: string
             }
+            extendedTextMessageData?: {
+                text: string
+            }
         }
+    };
+}
+
+export interface Message {
+    receiptId: number;
+    typeWebhook: string;
+    message: string;
+    timestamp: number;
+    senderData: {
+        sender: string;
+        senderName: string;
     };
 }
 

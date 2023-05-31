@@ -1,12 +1,10 @@
-import {fetchAccountSettings} from 'entities/AccountSettings';
-import {useDispatch} from 'react-redux';
+import {memo} from 'react';
+import Logo from 'shared/assets/logo.svg';
 import {classNames} from 'shared/lib/classNames/classNames';
+import {Icon} from 'shared/ui/Icon';
 import {HStack} from 'shared/ui/Stack';
 import {Text} from 'shared/ui/Text';
 import cls from './Header.module.scss';
-import {memo, useEffect} from 'react';
-import Logo from 'shared/assets/logo.svg'
-import { Icon } from 'shared/ui/Icon';
 
 interface HeaderProps {
     className?: string;
@@ -16,11 +14,6 @@ export const Header = memo((props: HeaderProps) => {
     const {
         className
     } = props;
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(fetchAccountSettings(null));
-    }, [])
 
     return (
         <HStack

@@ -1,6 +1,5 @@
 import { MouseEvent, ReactNode } from 'react';
 import { classNames, Mods } from 'shared/lib/classNames/classNames';
-import { useTheme } from 'shared/lib/hooks/useTheme/useThem';
 import { Overlay } from '../Overlay/Overlay';
 import { useModal } from '../../lib/hooks/useModal/useModal';
 import { Portal } from '../Portal/Portal';
@@ -17,7 +16,6 @@ interface ModalProps {
 const ANIMATION_DELAY = 300;
 
 export const Modal = (props: ModalProps) => {
-    const { theme } = useTheme();
     const {
         children,
         className,
@@ -47,10 +45,8 @@ export const Modal = (props: ModalProps) => {
 
     return (
         <Portal>
-            <div className={classNames(cls.Modal, mods, [className, 'app_modal', theme])}>
-                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+            <div className={classNames(cls.Modal, mods, [className])}>
                 <Overlay onClick={close} />
-                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                 <div
                     className={classNames(cls.content, {})}
                     onClick={contentClickHandler}

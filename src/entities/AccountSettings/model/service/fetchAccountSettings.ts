@@ -1,13 +1,11 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
-import {idInstance, apiTokenInstance} from 'entities/AccountSettings/model/const/constID';
-import {AccountData} from 'entities/AccountSettings/model/type/AccountSettingsShema';
-import {AccountSettings} from 'entities/AccountSettings/ui/AccountSettings';
 import {ThunkConfig} from 'shared/types/thunkConfig/thunkConfig';
+import { AccountData } from '../type/AccountSettingsShema';
 
-export const fetchAccountSettings = createAsyncThunk<AccountData, null, ThunkConfig<string>>(
+export const fetchAccountSettings = createAsyncThunk<AccountData, {idInstance: string, apiTokenInstance: string}, ThunkConfig<string>>(
     'AccountSettings',
-    async (_, thunkAPI) => {
+    async ({idInstance, apiTokenInstance}, thunkAPI) => {
         const {rejectWithValue} = thunkAPI
         try {
             console.log('fetchAccountSettings');

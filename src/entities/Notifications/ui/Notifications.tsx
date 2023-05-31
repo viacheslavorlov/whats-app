@@ -1,20 +1,16 @@
-import {getNotifications} from 'entities/Notifications/model/selectors/notificationSelector';
-import {notificationActions} from 'entities/Notifications/model/slice/notificationSlice';
+import {Message} from 'entities/Notifications/model/type/NotificationsShema';
 import {memo, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {classNames} from 'shared/lib/classNames/classNames';
+import {getNotifications} from '../model/selectors/notificationSelector';
 import {useDeleteNotificationMutation} from '../model/service/deleteNotification';
 import {useGetNotificationQuery} from '../model/service/fetchNotification';
+import {notificationActions} from '../model/slice/notificationSlice';
 // import {useGetNotificationQuery} from '../model/service/fetchNotification';
 import cls from './Notifications.module.scss';
 
 interface NotificationsProps {
     className?: string;
-}
-
-export interface Message {
-    receiptId: number,
-    body: any;
 }
 
 export const Notifications = memo((props: NotificationsProps) => {
@@ -23,24 +19,27 @@ export const Notifications = memo((props: NotificationsProps) => {
     } = props;
     const dispatch = useDispatch();
     const messages = useSelector(getNotifications)
-    const {data, isSuccess, refetch} = useGetNotificationQuery(null, {});
+    const {data, isSuccess, refetch} = useGetNotificationQuery(null, {
+        pollingInterval: 3000
+    });
 
     const [deleteNotification] = useDeleteNotificationMutation();
     useEffect(() => {
-        if (data){
-            dispatch(notificationActions.addNotification(data))
+        if (data) {
+            console.log(data);
+            if (data?.typeWebhook !== 'stateInstanceChanged') {
+                dispatch(notificationActions.addNotification(data))
+            }
             deleteNotification(data.receiptId)
             refetch()
         }
     }, [data, deleteNotification, dispatch, refetch])
     return (
-        <div
-            className={classNames(cls.Notifications, {}, [className])}
-            onClick={() => deleteNotification(Number(data?.receiptId))}>
-            {messages.map(msg => (
+        <div className={classNames(cls.Notifications, {}, [className])}>
+            {messages.map((msg: Message) => (
                 <div key={msg.receiptId}>
-                    {msg.receiptId}
-                    {msg.body.messageData?.extendedTextMessageData?.text}
+                    {msg.typeWebhook.startsWith('outgoing') ? 'Я: ' : msg.senderData.senderName + ': '}
+                    {msg.message}
                 </div>
             ))}
         </div>

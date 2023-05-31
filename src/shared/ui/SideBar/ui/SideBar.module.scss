@@ -1,4 +1,6 @@
 .SideBar {
 	min-width: 336px;
 	max-width: 448px;
+	height: calc(100vh - var(--header-height));
+	background: var(--color-white);
 }

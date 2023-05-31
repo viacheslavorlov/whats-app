@@ -1,5 +1,5 @@
 .Overlay {
-    background: var(--overlay-color);
+    background: darkgray;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -10,5 +10,5 @@
     left: 0;
     z-index: -1;
     cursor: pointer;
-    opacity: 0.5;
+    opacity: 0.9;
 }

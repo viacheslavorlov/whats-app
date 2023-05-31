@@ -3,18 +3,8 @@ import { classNames, Mods } from 'shared/lib/classNames/classNames';
 import cls from './Button.module.scss';
 
 export enum ButtonTheme {
-    // eslint-disable-next-line no-unused-vars
-    CLEAR = 'clear',
-    CLEAR_INVERTED = 'clearInverted',
-    // eslint-disable-next-line no-unused-vars
     CLASSIC = 'classic',
-    // eslint-disable-next-line no-unused-vars
-    OUTLINE = 'outline',
-    OUTLINE_RED = 'outline_red',
-    // eslint-disable-next-line no-unused-vars
-    BACKGROUND = 'background',
-    // eslint-disable-next-line no-unused-vars
-    BACKGROUND_INVERTED = 'backgroundInverted'
+    ROUNDED = 'rounded'
 }
 
 export enum ButtonSize {
@@ -38,7 +28,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button = memo((props: ButtonProps) => {
     const {
         className,
-        theme = ButtonTheme.OUTLINE,
+        theme = ButtonTheme.ROUNDED,
         square,
         size = ButtonSize.M,
         children,

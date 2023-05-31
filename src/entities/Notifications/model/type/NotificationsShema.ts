@@ -1,4 +1,6 @@
-export interface NotificationData {
+export type NotificationData = Notification | null;
+
+export interface Notification {
     receiptId: number,
     body: {
         typeWebhook: string,

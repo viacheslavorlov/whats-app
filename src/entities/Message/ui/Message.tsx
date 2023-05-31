@@ -1,4 +1,6 @@
+import {getCurrentContact} from 'entities/Contacts/model/selectors/contactSelectors';
 import {useGetNotificationQuery} from 'entities/Notifications/model/service/fetchNotification';
+import {getApiTokenInstance, getIdInstance} from 'features/Authorisation/model/selectors/authSelectors';
 import {ChangeEvent, memo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {classNames} from 'shared/lib/classNames/classNames';
@@ -17,19 +19,16 @@ export const Message = memo((props: MessageProps) => {
     const {
         className
     } = props;
-    const [number, setNumber] = useState('');
+    const number = useSelector(getCurrentContact)
     const dispatch = useDispatch();
     const messageData = useSelector(getMessageSelector);
-    const isLoading = useSelector(getMessageLoading);
-    const error = useSelector(getMessageError);
     const onHandleText = (e: ChangeEvent<HTMLTextAreaElement>) => {
         dispatch(messageActions.setMessage(e.target.value));
     };
 
-    const onChangeNumber = (e: ChangeEvent<HTMLInputElement>) => {
-        setNumber(e.target.value);
-    };
-    const {refetch} = useGetNotificationQuery(null, {})
+    const idInstance = useSelector(getIdInstance)
+    const apiTokenInstance = useSelector(getApiTokenInstance)
+    const {refetch} = useGetNotificationQuery({idInstance, apiTokenInstance}, {})
 
     const onSendMessage = () => {
         dispatch(sendMessage({message: messageData.message, chatId: `${number}@c.us`}));
@@ -39,7 +38,6 @@ export const Message = memo((props: MessageProps) => {
 
     return (
         <VStack max justify={'center'} align={'center'} className={classNames(cls.Message, {}, [className])}>
-            <input type="text" placeholder={'Введите номер абонента'} value={number} onChange={onChangeNumber}/>
             <textarea
                 placeholder={'Введите сообщение'}
                 value={messageData.message}

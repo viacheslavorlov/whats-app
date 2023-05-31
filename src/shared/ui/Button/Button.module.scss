@@ -1,6 +1,6 @@
 .Button {
     cursor: pointer;
-    color: var(--primary-color);
+    color: black;
     padding: 6px 15px;
 
     &:hover {
@@ -28,9 +28,9 @@
     color: var(--primary-color);
 }
 
-.outline_red {
+.rounded {
     border: 1px solid var(--red-light);
-    color: var(--red-light);
+
 }
 
 .background {

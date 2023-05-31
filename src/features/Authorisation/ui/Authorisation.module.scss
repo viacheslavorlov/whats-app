@@ -1,10 +1,33 @@
 .Authorisation {
-
+	height: 50vh;
+	background: #00a884;
+	width: 50vw;
+	border-radius: 10px;
+	color: var(--color-white);
 }
-
 
 .modal {
 	z-index: 100;
 	height: 100vh;
 	width: 100vw;
+}
+
+.input {
+
+	width: 90%;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.button {
+	color: black;
+	width: 90%;
+	border-radius: 5px;
+}
+
+.label {
+	align-items: center;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
 }

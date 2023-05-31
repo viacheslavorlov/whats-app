@@ -6,26 +6,29 @@ import {rtkApi} from 'shared/api/rtkApi';
 
 const fetchNotification = rtkApi.injectEndpoints({
     endpoints: build => ({
-        getNotification: build.query<Message | null, null>({
-            query: () => ({
+        getNotification: build.query<Message, {apiTokenInstance: string, idInstance: string}>({
+            query: ({apiTokenInstance, idInstance}) => ({
                 url: `waInstance${idInstance}/receiveNotification/${apiTokenInstance}`,
             }),// @ts-ignore
-            transformResponse: (response: NotificationData | null) => {
-                if (response === null || response?.body?.typeWebhook === 'stateInstanceChanged') {
-                    return null;
+            transformResponse: (response: NotificationData) => {
+                if (response === null || !/message/ig.test(response.body?.typeWebhook)) {
+                    return {
+                        typeWebhook: response?.body?.typeWebhook || '',
+                        receiptId: response?.receiptId || '',
+                        message: '',
+                        senderData: {},
+                        timestamp: response?.body.timestamp || 0
+                    };
                 }
-                const message = response?.body?.messageData?.extendedTextMessageData?.text || response?.body?.messageData?.textMessageData?.textMessage;
+                const message = response.body?.messageData?.extendedTextMessageData?.text || response.body?.messageData?.textMessageData?.textMessage;
                 console.log(message);
                 const timestamp = response.body.timestamp;
                 const senderData = {
-                    // @ts-ignore
-                    sender: response.body.senderData.sender,
-                    // @ts-ignore
-                    senderName: response.body.senderData.senderName
+                    sender: response.body?.senderData?.sender,
+                    senderName: response.body?.senderData?.senderName
                 };
-                return {// @ts-ignore
+                return {
                     receiptId: response.receiptId,
-                    // @ts-ignore
                     typeWebhook: response.body.typeWebhook,
                     message,
                     timestamp,

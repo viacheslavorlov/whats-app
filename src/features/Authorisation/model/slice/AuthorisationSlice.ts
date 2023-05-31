@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {AuthorisationSchema} from 'features/Authorisation/model/type/AuthorisationShema';
+import {AuthorisationSchema} from '../type/AuthorisationShema';
 
 const initialState: AuthorisationSchema = {
     idInstance: '',

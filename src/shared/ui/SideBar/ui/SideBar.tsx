@@ -1,5 +1,5 @@
 import {classNames} from 'shared/lib/classNames/classNames';
-import {VStack} from 'shared/ui/Stack';
+import {VStack} from '../../Stack';
 import cls from './SideBar.module.scss';
 import {memo, ReactNode} from 'react';
 
@@ -14,7 +14,7 @@ export const SideBar = memo((props: SideBarProps) => {
     } = props;
 
     return (
-        <VStack align={'start'} justify={'start'} className={classNames(cls.SideBar, {}, [className])}>
+        <VStack align={'center'} justify={'start'} className={classNames(cls.SideBar, {}, [className])}>
             {children}
         </VStack>
     );

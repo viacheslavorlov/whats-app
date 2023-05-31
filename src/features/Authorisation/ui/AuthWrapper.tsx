@@ -1,10 +1,10 @@
-import cls from 'app/style.module.scss';
 import {fetchAccountSettings} from 'entities/AccountSettings';
-import {Authorisation} from 'features/Authorisation';
-import {getApiTokenInstance, getIdInstance} from '../model/selectors/authSelectors';
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Modal} from 'shared/ui/Modal';
+import {getApiTokenInstance, getIdInstance} from '../model/selectors/authSelectors';
+import {Authorisation} from './Authorisation';
+import cls from './Authorisation.module.scss';
 
 export const AuthWrapper = () => {
     const dispatch = useDispatch();
@@ -16,7 +16,7 @@ export const AuthWrapper = () => {
     };
     useEffect(() => {
         dispatch(fetchAccountSettings({idInstance, apiTokenInstance}));
-    }, [idInstance, apiTokenInstance]);
+    }, [dispatch, idInstance, apiTokenInstance]);
 
 
     return (

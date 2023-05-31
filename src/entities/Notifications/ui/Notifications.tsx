@@ -1,4 +1,6 @@
 import {Message} from 'entities/Notifications/model/type/NotificationsShema';
+import {NotificationCard} from 'entities/Notifications/ui/NotificationCard/NotificationCard';
+import {getApiTokenInstance, getIdInstance} from 'features/Authorisation/model/selectors/authSelectors';
 import {memo, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {classNames} from 'shared/lib/classNames/classNames';
@@ -18,30 +20,28 @@ export const Notifications = memo((props: NotificationsProps) => {
         className
     } = props;
     const dispatch = useDispatch();
-    const messages = useSelector(getNotifications)
-    const {data, isSuccess, refetch} = useGetNotificationQuery(null, {
+    const messages = useSelector(getNotifications);
+    const idInstance = useSelector(getIdInstance);
+    const apiTokenInstance = useSelector(getApiTokenInstance);
+    const {data, isSuccess, refetch} = useGetNotificationQuery({idInstance, apiTokenInstance}, {
         pollingInterval: 3000
     });
+    const messageContent = messages.map(msg => <NotificationCard notification={msg} />)
+
 
     const [deleteNotification] = useDeleteNotificationMutation();
     useEffect(() => {
-        if (data) {
-            console.log(data);
-            if (data?.typeWebhook !== 'stateInstanceChanged') {
-                dispatch(notificationActions.addNotification(data))
-            }
-            deleteNotification(data.receiptId)
-            refetch()
+        if (data && data.typeWebhook === 'stateInstanceChanged') {
+            deleteNotification(Number(data.receiptId));
         }
-    }, [data, deleteNotification, dispatch, refetch])
+        if (data && data.message !== '') {
+            dispatch(notificationActions.addNotification(data));
+            deleteNotification(Number(data.receiptId));
+        }
+    }, [data, deleteNotification, dispatch, refetch]);
     return (
         <div className={classNames(cls.Notifications, {}, [className])}>
-            {messages.map((msg: Message) => (
-                <div key={msg.receiptId}>
-                    {msg.typeWebhook.startsWith('outgoing') ? 'Я: ' : msg.senderData.senderName + ': '}
-                    {msg.message}
-                </div>
-            ))}
+            {messageContent}
         </div>
     );
 });

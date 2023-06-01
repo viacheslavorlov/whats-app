@@ -1,3 +1,20 @@
 .Message {
+	width: 100%;
 
+}
+
+.textarea {
+	width: 80%;
+	color: white;
+	border: none;
+	border-radius: 10px;
+	padding: 9px 12px;
+	margin: 5px 8px;
+	background-color: #2a3942;
+	resize: vertical;
+}
+
+.btn {
+	background: none;
+	border: none;
 }

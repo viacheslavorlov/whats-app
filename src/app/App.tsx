@@ -7,7 +7,8 @@ import {useSelector} from 'react-redux';
 import {SideBar} from 'shared/ui/SideBar';
 import {HStack, VStack} from 'shared/ui/Stack';
 import {Header} from 'wigets/Header';
-import './style.module.scss'
+import cls from './App.module.scss';
+import './style.module.scss';
 
 
 export const App = () => {
@@ -17,21 +18,21 @@ export const App = () => {
     return (
         <VStack max>
             <>
-            <Header/>
-            <AuthWrapper/>
-            {
-                authorized && (
-                    <HStack max>
-                        <SideBar>
-                            <Contacts/>
-                        </SideBar>
-                        <div>
-                            <Notifications/>
-                            <Message/>
-                        </div>
-                    </HStack>
-                )
-            }
+                <Header/>
+                <AuthWrapper/>
+                {
+                    authorized && (
+                        <HStack max>
+                            <SideBar>
+                                <Contacts/>
+                            </SideBar>
+                            <VStack max justify={'center'} align={'center'} className={cls.container}>
+                                <Notifications/>
+                                <Message/>
+                            </VStack>
+                        </HStack>
+                    )
+                }
             </>
         </VStack>
     );

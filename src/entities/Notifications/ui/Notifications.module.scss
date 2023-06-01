@@ -1,5 +1,11 @@
+
 .Notifications {
-	background: #00a884;
-	width: 360px;
-	height: 220px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	width: 100%;
+	height: 100%;
+}
+
+.text {
+	text-align: center;
 }

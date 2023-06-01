@@ -1,12 +1,10 @@
 // https://api.green-api.com/waInstance{{idInstance}}/receiveNotification/{{apiTokenInstance}}
-
-import {apiTokenInstance, idInstance} from 'entities/AccountSettings';
-import {Message, NotificationData} from '../type/NotificationsShema';
+import {MessageShema, NotificationData} from '../type/NotificationsShema';
 import {rtkApi} from 'shared/api/rtkApi';
 
 const fetchNotification = rtkApi.injectEndpoints({
     endpoints: build => ({
-        getNotification: build.query<Message, {apiTokenInstance: string, idInstance: string}>({
+        getNotification: build.query<MessageShema, {apiTokenInstance: string, idInstance: string}>({
             query: ({apiTokenInstance, idInstance}) => ({
                 url: `waInstance${idInstance}/receiveNotification/${apiTokenInstance}`,
             }),// @ts-ignore
@@ -14,7 +12,7 @@ const fetchNotification = rtkApi.injectEndpoints({
                 if (response === null || !/message/ig.test(response.body?.typeWebhook)) {
                     return {
                         typeWebhook: response?.body?.typeWebhook || '',
-                        receiptId: response?.receiptId || '',
+                        receiptId: response?.receiptId,
                         message: '',
                         senderData: {},
                         timestamp: response?.body.timestamp || 0

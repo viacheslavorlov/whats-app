@@ -4,7 +4,8 @@ import {classNames} from 'shared/lib/classNames/classNames';
 import {Button, ButtonTheme} from 'shared/ui/Button';
 import {LoadingSpinner} from 'shared/ui/LoadingSpinner';
 import {VStack} from 'shared/ui/Stack';
-import {getApiTokenInstance, getIdInstance} from '../model/selectors/authSelectors';
+import {Text} from 'shared/ui/Text';
+import {getApiTokenInstance, getAuthorized, getIdInstance} from '../model/selectors/authSelectors';
 import {useGetAccountStateQuery} from '../model/service/fetchAccountState';
 import {authActions} from '../model/slice/AuthorisationSlice';
 import cls from './Authorisation.module.scss';
@@ -22,6 +23,7 @@ export const Authorisation = memo((props: AuthorisationProps) => {
     const dispatch = useDispatch();
     const idInstance = useSelector(getIdInstance);
     const apiTokenInstance = useSelector(getApiTokenInstance);
+    const authorized = useSelector(getAuthorized);
 
     const onIdInstanceChange = (e: ChangeEvent<HTMLInputElement>) => {
         dispatch(authActions.setIdInstance(e.target.value));
@@ -41,6 +43,15 @@ export const Authorisation = memo((props: AuthorisationProps) => {
             onClose();
         }
     };
+    const message = data?.stateInstance === 'authorized' ?
+        <Text content={'Вы авторизованы в системе'}/>
+        : (<>
+            <Text className={cls.textNotAuthorized} title={'Вы НЕ авторизованы в системе:'}/>
+            <Text
+                className={cls.textNotAuthorized}
+                content={'Перейдите в свой аккаунт https://green-api.com и авторизуйтесь с помощью QR-кода и телефона'}
+            />
+            </>);
 
     return (
         <VStack max gap={'16'} align={'center'}
@@ -74,6 +85,7 @@ export const Authorisation = memo((props: AuthorisationProps) => {
                 Войти
             </Button>
             {isLoading && <LoadingSpinner/>}
+            <div>{message}</div>
         </VStack>
     );
 });

@@ -1,4 +1,3 @@
-export {AccountSettings} from './ui/AccountSettings'
 export {
     apiTokenInstance,idInstance
 } from './model/const/constID'

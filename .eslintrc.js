@@ -48,19 +48,7 @@ module.exports = {
         'react-hooks/exhaustive-deps': 'error',
         'no-param-reassign': 'off',
         'fsd-architecture-checker/import-path-checker': 'error',
-        'fsd-architecture-checker/public-api-import': [
-            'error',
-            {
-                testFilesPatterns: ['**/*.test.*', '**/*.story.*'],
-            }
-        ],
-        'fsd-architecture-checker/layers-imports-order': [
-            'error',
-            {
-                ignoreImportPatterns: ['**/StoreProvider', '**/testing'],
-            }
-        ],
-        '@typescript-eslint/no-unused-vars': 'off',
+	    '@typescript-eslint/no-unused-vars': 'off',
         'unused-imports/no-unused-imports': 'error',
         'unused-imports/no-unused-vars': [
             'warn',

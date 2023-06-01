@@ -1,26 +1,26 @@
 .NotificationCard {
-	margin: 5px;
-	padding: 6px 7px 8px 9px;
-	line-height: 19px;
-	border-radius: 10px;
-	max-width: 65%;
+    margin: 5px;
+    padding: 6px 7px 8px 9px;
+    line-height: 19px;
+    border-radius: 10px;
+    max-width: 65%;
 }
 
 .me {
-	align-self: flex-end;
-	background-color: var(--bg-green);
+    align-self: flex-end;
+    background-color: var(--bg-green);
 }
 
 .notMe {
-	align-self: flex-start;
-	background-color: var(--bg-card);
+    align-self: flex-start;
+    background-color: var(--bg-card);
 }
 
 .message {
-	color: var(--color-white);
+    color: var(--color-white);
 }
 
 .time {
-	font-size: 12px;
-	color: var(--text-gray);
+    font-size: 12px;
+    color: var(--text-gray);
 }

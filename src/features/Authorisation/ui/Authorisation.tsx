@@ -1,7 +1,6 @@
 import {ChangeEvent, memo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {classNames} from 'shared/lib/classNames/classNames';
-import {Button, ButtonTheme} from 'shared/ui/Button';
 import {LoadingSpinner} from 'shared/ui/LoadingSpinner';
 import {VStack} from 'shared/ui/Stack';
 import {Text} from 'shared/ui/Text';
@@ -51,11 +50,11 @@ export const Authorisation = memo((props: AuthorisationProps) => {
                 className={cls.textNotAuthorized}
                 content={'Перейдите в свой аккаунт https://green-api.com и авторизуйтесь с помощью QR-кода и телефона'}
             />
-            </>);
+        </>);
 
     return (
         <VStack max gap={'16'} align={'center'}
-                className={classNames(cls.Authorisation, {}, [className])}>
+            className={classNames(cls.Authorisation, {}, [className])}>
             <h1>Авторизация</h1>
             <label className={cls.label} htmlFor="idInstance">Введите idInstance:
                 <input
@@ -75,15 +74,12 @@ export const Authorisation = memo((props: AuthorisationProps) => {
                     onChange={onApiTokenInstanceChange}
                 /></label>
 
-            <Button
-
-                theme={ButtonTheme.ROUNDED}
+            <button
                 className={cls.button}
-                onClick={onEnter}>
-
-
+                onClick={onEnter}
+            >
                 Войти
-            </Button>
+            </button>
             {isLoading && <LoadingSpinner/>}
             <div>{message}</div>
         </VStack>

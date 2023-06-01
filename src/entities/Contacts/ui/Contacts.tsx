@@ -1,4 +1,4 @@
-import {contactsSliceActions} from 'entities/Contacts/model/slice/ContactsSlice';
+import {contactsSliceActions} from '../model/slice/ContactsSlice';
 import {memo, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {classNames} from 'shared/lib/classNames/classNames';

@@ -1,5 +1,5 @@
 import {getCurrentContact} from 'entities/Contacts/model/selectors/contactSelectors';
-import {NotificationCard} from 'entities/Notifications/ui/NotificationCard/NotificationCard';
+import {NotificationCard} from './NotificationCard/NotificationCard';
 import {getApiTokenInstance, getIdInstance} from 'features/Authorisation/model/selectors/authSelectors';
 import {memo, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -48,7 +48,7 @@ export const Notifications = memo((props: NotificationsProps) => {
             dispatch(notificationActions.addNotification(data));
             deleteNotification({receiptId: data.receiptId, idInstance, apiTokenInstance});
         }
-    }, [data, deleteNotification, dispatch, refetch]);
+    }, [data, deleteNotification, dispatch, refetch, idInstance, apiTokenInstance]);
 
     const styles = {
         backgroundImage: 'url("/bg.jpg")',
@@ -73,7 +73,10 @@ export const Notifications = memo((props: NotificationsProps) => {
                 align={'center'}
                 className={classNames(cls.Notifications, {}, [className])}>
                 <PlaceholderImage/>
-                <Text className={cls.text} content={'Отправляйте и получайте сообщения без необходимости оставлять телефон подключённым.'}/>
+                <Text
+                    className={cls.text}
+                    content={'Отправляйте и получайте сообщения без необходимости оставлять телефон подключённым.'}
+                />
             </VStack>
         )
     );

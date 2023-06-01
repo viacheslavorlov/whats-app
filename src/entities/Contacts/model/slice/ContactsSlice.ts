@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {ContactsSchema} from 'entities/Contacts/model/type/ContactsShema';
+import {ContactsSchema} from '../type/ContactsShema';
 
 const initialState: ContactsSchema = {
     contacts: [],

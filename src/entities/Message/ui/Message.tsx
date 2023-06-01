@@ -4,10 +4,10 @@ import {useGetNotificationQuery} from 'entities/Notifications/model/service/fetc
 import {notificationActions} from 'entities/Notifications/model/slice/notificationSlice';
 import {MessageShema} from 'entities/Notifications/model/type/NotificationsShema';
 import {getApiTokenInstance, getIdInstance} from 'features/Authorisation/model/selectors/authSelectors';
-import {ChangeEvent, memo, useEffect} from 'react';
+import {ChangeEvent, memo, useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {classNames} from 'shared/lib/classNames/classNames';
-import {HStack, VStack} from 'shared/ui/Stack';
+import {HStack} from 'shared/ui/Stack';
 import {getMessageSelector,} from '../model/selectors/messageSelectors';
 
 import {messageActions} from '../model/slice/MessageSlice';
@@ -35,28 +35,29 @@ export const Message = memo((props: MessageProps) => {
     const idInstance = useSelector(getIdInstance)
     const apiTokenInstance = useSelector(getApiTokenInstance)
     const {refetch} = useGetNotificationQuery({idInstance, apiTokenInstance}, {})
-    const localMessage: MessageShema = {
-        message: messageData.message,
-        timestamp: Math.round(Date.now() / 1000),
-        typeWebhook: 'outgoingMessageSent',
-        chatId: `${number}@c.us`,
-        receiptId: Date.now()
-    }
 
-    const disabled = !Boolean(number);
+
+    const disabled = !number;
 
     // const [sendMessage] = useSendMessageMutation()
 
-    const onSendMessage = () => {
+    const onSendMessage = useCallback(() => {
+        const localMessage: MessageShema = {
+            message: messageData.message,
+            timestamp: Math.round(Date.now() / 1000),
+            typeWebhook: 'outgoingMessageSent',
+            chatId: `${number}@c.us`,
+            receiptId: Date.now()
+        }
         if (messageData.message.trim()) {
             dispatch(sendMessage({
-                    message: messageData.message, chatId: `${number}@c.us`
+                message: messageData.message, chatId: `${number}@c.us`
             }));
             dispatch(notificationActions.addNotification(localMessage));
             dispatch(messageActions.clearMessageText());
             refetch()
         }
-    };
+    },[messageData, dispatch, number, refetch]);
     useEffect(() => {
         function handleKeyPress(event: { key: string; }) {
             if (event.key === 'Enter') {

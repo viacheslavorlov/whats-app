@@ -18,7 +18,8 @@ const fetchNotification = rtkApi.injectEndpoints({
                         timestamp: response?.body.timestamp || 0
                     };
                 }
-                const message = response.body?.messageData?.extendedTextMessageData?.text || response.body?.messageData?.textMessageData?.textMessage;
+                const message = response.body?.messageData?.extendedTextMessageData?.text
+                    || response.body?.messageData?.textMessageData?.textMessage;
                 console.log(message);
                 const timestamp = response.body.timestamp;
                 const senderData = {

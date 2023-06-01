@@ -30,7 +30,14 @@ export const Notifications = memo((props: NotificationsProps) => {
     const {data, refetch} = useGetNotificationQuery({idInstance, apiTokenInstance}, {
         pollingInterval: 3000
     });
-    const messageContent = messages.map((msg) => <NotificationCard key={msg.timestamp} notification={msg}/>);
+
+    const messageContent = messages.filter(message => {
+        if (message.senderData?.sender === `${currentNumber}@c.us` || message.typeWebhook === 'outgoingMessageSent') {
+            return true;
+        } else {
+            return false;
+        }
+    }).map((msg) => <NotificationCard key={msg.timestamp} notification={msg}/>);
 
     const [deleteNotification] = useDeleteNotificationMutation();
 
@@ -43,10 +50,18 @@ export const Notifications = memo((props: NotificationsProps) => {
         }
     }, [data, deleteNotification, dispatch, refetch]);
 
+    const styles = {
+        backgroundImage: 'url("/bg.jpg")',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center center',
+    };
+
     return (
         currentNumber ? (
             <VStack
                 max
+                style={styles}
                 justify={'end'}
                 className={classNames(cls.Notifications, {}, [className])}>
                 {messageContent}

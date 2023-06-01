@@ -39,6 +39,7 @@ export interface MessageShema {
     typeWebhook: string;
     message: string;
     timestamp: number;
+    chatId: string;
     senderData?: {
         sender: string;
         senderName: string;

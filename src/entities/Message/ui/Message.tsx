@@ -39,10 +39,7 @@ export const Message = memo((props: MessageProps) => {
         message: messageData.message,
         timestamp: Math.round(Date.now() / 1000),
         typeWebhook: 'outgoingMessageSent',
-        // senderData: {
-        //     sender: '',
-        //     senderName: 'Я'
-        // },
+        chatId: `${number}@c.us`,
         receiptId: Date.now()
     }
 
@@ -51,7 +48,7 @@ export const Message = memo((props: MessageProps) => {
     // const [sendMessage] = useSendMessageMutation()
 
     const onSendMessage = () => {
-        if (messageData.message) {
+        if (messageData.message.trim()) {
             dispatch(sendMessage({
                     message: messageData.message, chatId: `${number}@c.us`
             }));
@@ -70,7 +67,7 @@ export const Message = memo((props: MessageProps) => {
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, []);
+    }, [onSendMessage]);
 
     return (
         <HStack max justify={'center'} align={'center'} className={classNames(cls.Message, {}, [className])}>

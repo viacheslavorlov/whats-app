@@ -29,30 +29,6 @@
 
 ----         ------------
 
-## Интернационализация
-
-Для работы с переводами в проекте использована библиотека i18next.
-Файлы с переводами хранятся в папке public/locales.
-
-Для удобства можно использовать плагин i18next для вашего редактора:
-[webstorm](https://plugins.jetbrains.com/plugin/16316-easy-i18n),
-[vscode](https://github.com/lokalise/i18n-ally)
-
-Документация по библиотеке: https://www.i18next.com/
-
-----
-
-## Тестирование
-
-В проекте используется 3 вида тестов:
-
-1. Unit - тесты - `npm run unit`
-2. Тесты для React-компонентов с [React testing library](https://testing-library.com/docs/react-testing-library/intro/)
-    - `npm run unit`
-3. Скриншотное тестирование loki + storybook - `npm run loki:test`
-
---------
-
 ## Линтер
 
 В проекте используется eslint для проверки typescript кода и stylelint для проверки файлов со стилями.

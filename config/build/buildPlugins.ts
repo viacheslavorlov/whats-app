@@ -7,13 +7,12 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import { BuildOptions } from './types/config';
 
 export function buildPlugins({
-    paths, isDev, apiUrl,
+    paths, isDev,
 }: BuildOptions): webpack.WebpackPluginInstance[] {
     const plugins = [];
     plugins.push(
         new webpack.DefinePlugin({
             __IS_DEV: JSON.stringify(isDev),
-            __API_URL: JSON.stringify(apiUrl),
         }),
         new HtmlWebpackPlugin({
             template: paths.html,

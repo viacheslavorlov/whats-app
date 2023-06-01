@@ -1,6 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {MessageSliceShema} from '/entities/Message';
-import {sendMessage} from '../service/sendMessage';
 
 const initialState: MessageSliceShema = {
     message: {
@@ -22,16 +21,6 @@ export const messageSlice = createSlice({
         clearMessageText: (state) => {
             state.message.message = '';
         }
-    },
-    extraReducers: builder => {
-        builder
-            .addCase(sendMessage.pending, state => {
-                state.isLoading = true;
-            })
-            .addCase(sendMessage.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.response = action.payload;
-            });
     }
 });
 

@@ -29,19 +29,24 @@ export interface Notification {
     };
 }
 
-export interface Message {
+export interface MessageSendSchema {
+    chatId: string;
+    message: string;
+}
+
+export interface MessageShema {
     receiptId: number;
     typeWebhook: string;
     message: string;
     timestamp: number;
-    senderData: {
+    senderData?: {
         sender: string;
         senderName: string;
     };
 }
 
 export interface NotificationSliceShema {
-    notifications: Message[]
+    notifications: MessageShema[]
 }
 
 const data = {

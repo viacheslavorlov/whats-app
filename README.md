@@ -112,3 +112,249 @@ export function useModal({
 }
 
 ```
+## Сложные компоненты
+
+### Message.tsx
+Данный компонент представляет собой форму для отправки сообщений в мессенджере WhatsApp. Он содержит следующие импорты из различных модулей:
+
+-  getCurrentContact  из модуля  contactSelectors  в  entities/Contacts/model/selectors ;
+-  useGetNotificationQuery  из модуля  fetchNotification  в  entities/Notifications/model/service ;
+-  notificationActions  из модуля  notificationSlice  в  entities/Notifications/model/slice ;
+-  MessageShema  из модуля  NotificationsShema  в  entities/Notifications/model/type ;
+-  getApiTokenInstance  и  getIdInstance  из модуля  authSelectors  в  features/Authorisation/model/selectors ;
+-  memo ,  useCallback ,  useEffect ,  useDispatch  и  useSelector  из модуля  react ;
+-  classNames  из модуля  classNames  в  shared/lib/classNames ;
+-  HStack  из модуля  Stack  в  shared/ui/Stack ;
+-  getMessageSelector ,  messageActions ,  sendMessage  и  cls  из модуля  MessageSlice  в  ../model/slice/MessageSlice ;
+-  Send  и  Icon  из модуля  assets  и  ui  в  ../assets/send.svg  и  shared/ui/Icon  соответственно.
+
+Компонент содержит интерфейс  MessageProps , который имеет свойство  className . Компонент экспортируется как  Message.
+
+Внутри компонента определены следующие переменные:
+
+-  number , содержащая текущий контакт;
+-  dispatch , используемая для отправки действий в Redux-хранилище;
+-  messageData , содержащая данные о сообщении;
+-  idInstance  и  apiTokenInstance , содержащие идентификатор и токен для авторизации;
+-  refetch , используемая для повторного запроса данных;
+-  disabled , содержащая значение, указывающее, отключена ли кнопка отправки сообщения.
+
+Также в компоненте определены следующие функции:
+
+-  onHandleText , используемая для обновления текста сообщения;
+-  onSendMessage , используемая для отправки сообщения с помощью функции  sendMessage ;
+
+Компонент также содержит эффект  useEffect , который используется для обработки нажатия клавиши Enter при отправке сообщения.
+
+Возвращаемое значение компонента - форма, содержащая текстовое поле для ввода сообщения и кнопку отправки сообщения.
+
+
+```typescript jsx
+import {getCurrentContact} from 'entities/Contacts/model/selectors/contactSelectors'; 
+// import {useSendMessageMutation} from 'entities/Message/model/service/sendMessage'; 
+import {useGetNotificationQuery} from 'entities/Notifications/model/service/fetchNotification'; 
+import {notificationActions} from 'entities/Notifications/model/slice/notificationSlice'; 
+import {MessageShema} from 'entities/Notifications/model/type/NotificationsShema'; 
+import {getApiTokenInstance, getIdInstance} from 'features/Authorisation/model/selectors/authSelectors'; 
+import {ChangeEvent, memo, useCallback, useEffect} from 'react'; 
+import {useDispatch, useSelector} from 'react-redux'; 
+import {classNames} from 'shared/lib/classNames/classNames'; 
+import {HStack} from 'shared/ui/Stack'; 
+import {getMessageSelector,} from '../model/selectors/messageSelectors'; 
+import {messageActions} from '../model/slice/MessageSlice'; 
+import cls from './Message.module.scss'; 
+import Send from '../assets/send.svg'; 
+import { Icon } from 'shared/ui/Icon'; 
+import { sendMessage } from '../model/service/sendMessage'; 
+ 
+interface MessageProps { 
+    className?: string; 
+} 
+ 
+export const Message = memo((props: MessageProps) => { 
+    const { 
+        className 
+    } = props; 
+    const number = useSelector(getCurrentContact) 
+    const dispatch = useDispatch(); 
+ 
+    const messageData = useSelector(getMessageSelector); 
+    const onHandleText = (e: ChangeEvent<HTMLTextAreaElement>) => { 
+        dispatch(messageActions.setMessage(e.target.value)); 
+    }; 
+ 
+    const idInstance = useSelector(getIdInstance) 
+    const apiTokenInstance = useSelector(getApiTokenInstance) 
+    const {refetch} = useGetNotificationQuery({idInstance, apiTokenInstance}, {}) 
+ 
+ 
+    const disabled = !number; 
+ 
+    // const [sendMessage] = useSendMessageMutation() 
+ 
+    const onSendMessage = useCallback(() => { 
+        const localMessage: MessageShema = { 
+            message: messageData.message, 
+            timestamp: Math.round(Date.now() / 1000), 
+            typeWebhook: 'outgoingMessageSent', 
+            chatId: `${number}@c.us`, 
+            receiptId: Date.now() 
+        } 
+        if (messageData.message.trim()) { 
+            dispatch(sendMessage({ 
+                message: messageData.message, chatId: `${number}@c.us` 
+            })); 
+            dispatch(notificationActions.addNotification(localMessage)); 
+            dispatch(messageActions.clearMessageText()); 
+            refetch() 
+        } 
+    },[messageData, dispatch, number, refetch]); 
+    useEffect(() => { 
+        function handleKeyPress(event: { key: string; }) { 
+            if (event.key === 'Enter') { 
+                onSendMessage() 
+            } 
+        } 
+        window.addEventListener('keydown', handleKeyPress); 
+        return () => { 
+            window.removeEventListener('keydown', handleKeyPress); 
+        }; 
+    }, [onSendMessage]); 
+ 
+    return ( 
+        <HStack max justify={'center'} align={'center'} className={classNames(cls.Message, {}, [className])}> 
+            <textarea 
+                placeholder={'Введите сообщение'} 
+                value={messageData.message} 
+                onChange={onHandleText} 
+                disabled={disabled} 
+                className={cls.textarea}/>
+            <button
+                className={cls.btn} 
+                onClick={onSendMessage}> 
+                <Icon Svg={Send} height={30} width={30} fill={'#7c8b95'}/> 
+            </button> 
+        </HStack> 
+    ); 
+});
+```
+
+### Notifications.tsx
+
+Компонент Notifications отвечает за отображение уведомлений, связанных с учетной записью WhatsApp пользователя. Он использует несколько импортированных компонентов и селекторов для получения и отображения уведомлений.
+Props:
+- className (необязательно): строка, представляющая имя класса, которое будет применено к компоненту.
+  Импорты:
+- getCurrentContact: селектор, который извлекает текущий контакт WhatsApp.
+- NotificationCard: компонент, который отображает одно уведомление.
+- getApiTokenInstance, getIdInstance: селекторы, которые извлекают токен API и идентификатор экземпляра для учетной записи WhatsApp пользователя.
+- memo, useEffect, useDispatch, useSelector: хуки React, используемые для управления состоянием и обновления компонента.
+- classNames: утилита, используемая для генерации имен классов для компонента.
+- VStack: компонент, который отображает своих детей в вертикальном стеке.
+- Text: компонент, который отображает текст.
+- PlaceholderImage: изображение, которое будет отображаться, когда нет уведомлений для отображения.
+- getNotifications: селектор, который извлекает список уведомлений, которые будут отображаться.
+- useDeleteNotificationMutation: хук, который удаляет уведомление из списка.
+- useGetNotificationQuery: хук, который извлекает уведомления с сервера.
+- notificationActions: срез, содержащий состояние и действия, связанные с уведомлениями.
+- cls: объект, содержащий имена CSS-классов для стилизации компонента.
+  Состояние:
+- messages: массив уведомлений, которые будут отображаться.
+- currentNumber: текущий контакт WhatsApp.
+- idInstance, apiTokenInstance: идентификатор экземпляра и токен API для учетной записи WhatsApp пользователя.
+- data: данные, полученные с сервера.
+- refetch: функция, используемая для обновления данных с сервера.
+  Функции:
+- deleteNotification: функция, которая удаляет уведомление из списка.
+  Эффекты:
+- useEffect: используется для управления изменениями состояния и обновления компонента при необходимости.
+  Рендер:
+- Если есть текущий контакт WhatsApp, компонент отображает вертикальный стек компонентов NotificationCard, каждый из которых представляет одно уведомление.
+- Если текущего контакта WhatsApp нет, компонент отображает PlaceholderImage и компонент Text с сообщением, объясняющим, как использовать компонент.
+
+```typescript jsx
+
+import {getCurrentContact} from 'entities/Contacts/model/selectors/contactSelectors';
+import {NotificationCard} from './NotificationCard/NotificationCard';
+import {getApiTokenInstance, getIdInstance} from 'features/Authorisation/model/selectors/authSelectors';
+import {memo, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {classNames} from 'shared/lib/classNames/classNames';
+import {VStack} from 'shared/ui/Stack';
+import {Text} from 'shared/ui/Text';
+import PlaceholderImage from '../../../shared/assets/background.svg';
+import {getNotifications} from '../model/selectors/notificationSelector';
+import {useDeleteNotificationMutation} from '../model/service/deleteNotification';
+import {useGetNotificationQuery} from '../model/service/fetchNotification';
+import {notificationActions} from '../model/slice/notificationSlice';
+import cls from './Notifications.module.scss';
+
+interface NotificationsProps {
+    className?: string;
+}
+
+export const Notifications = memo((props: NotificationsProps) => {
+    const {
+        className
+    } = props;
+
+    const dispatch = useDispatch();
+    const messages = useSelector(getNotifications);
+    const currentNumber = useSelector(getCurrentContact);
+    const idInstance = useSelector(getIdInstance);
+    const apiTokenInstance = useSelector(getApiTokenInstance);
+    const {data, refetch} = useGetNotificationQuery({idInstance, apiTokenInstance}, {
+        pollingInterval: 3000
+    });
+
+    const messageContent = messages.filter(message => {
+        if (message.senderData?.sender === `${currentNumber}@c.us` || message.typeWebhook === 'outgoingMessageSent') {
+            return true;
+        } else {
+            return false;
+        }
+    }).map((msg) => <NotificationCard key={msg.timestamp} notification={msg}/>);
+
+    const [deleteNotification] = useDeleteNotificationMutation();
+
+    useEffect(() => {
+        if (data && data.typeWebhook !== 'incomingMessageReceived') {
+            deleteNotification({receiptId: data.receiptId, idInstance, apiTokenInstance});
+        } else if (data && data.message !== '') {
+            dispatch(notificationActions.addNotification(data));
+            deleteNotification({receiptId: data.receiptId, idInstance, apiTokenInstance});
+        }
+    }, [data, deleteNotification, dispatch, refetch, idInstance, apiTokenInstance]);
+
+    const styles = {
+        backgroundImage: 'url("/bg.jpg")',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center center',
+    };
+
+    return (
+        currentNumber ? (
+            <VStack
+                max
+                style={styles}
+                justify={'end'}
+                className={classNames(cls.Notifications, {}, [className])}>
+                {messageContent}
+            </VStack>
+        ) : (
+            <VStack
+                max
+                justify={'center'}
+                align={'center'}
+                className={classNames(cls.Notifications, {}, [className])}>
+                <PlaceholderImage/>
+                <Text
+                    className={cls.text}
+                    content={'Отправляйте и получайте сообщения без необходимости оставлять телефон подключённым.'}
+                />
+            </VStack>
+        )
+    );
+});
+```

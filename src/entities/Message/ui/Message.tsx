@@ -9,7 +9,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {classNames} from 'shared/lib/classNames/classNames';
 import {HStack} from 'shared/ui/Stack';
 import {getMessageSelector,} from '../model/selectors/messageSelectors';
-
 import {messageActions} from '../model/slice/MessageSlice';
 import cls from './Message.module.scss';
 import Send from '../assets/send.svg';

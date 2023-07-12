@@ -1,7 +1,9 @@
-import {ChangeEvent, memo} from 'react';
+import {Instruction} from 'features/Authorisation/ui/Instruction/Instruction';
+import {ChangeEvent, memo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {classNames} from 'shared/lib/classNames/classNames';
 import {LoadingSpinner} from 'shared/ui/LoadingSpinner';
+import {Modal} from 'shared/ui/Modal';
 import {VStack} from 'shared/ui/Stack';
 import {Text} from 'shared/ui/Text';
 import {getApiTokenInstance, getAuthorized, getIdInstance} from '../model/selectors/authSelectors';
@@ -18,7 +20,7 @@ export const Authorisation = memo((props: AuthorisationProps) => {
     const {
         className, onClose
     } = props;
-
+    const [showInstruction, setShowInstruction] = useState(false);
     const dispatch = useDispatch();
     const idInstance = useSelector(getIdInstance);
     const apiTokenInstance = useSelector(getApiTokenInstance);
@@ -54,7 +56,7 @@ export const Authorisation = memo((props: AuthorisationProps) => {
 
     return (
         <VStack max gap={'16'} align={'center'}
-            className={classNames(cls.Authorisation, {}, [className])}>
+                className={classNames(cls.Authorisation, {}, [className])}>
             <h1>Авторизация</h1>
             <label className={cls.label} htmlFor="idInstance">Введите idInstance:
                 <input
@@ -82,6 +84,21 @@ export const Authorisation = memo((props: AuthorisationProps) => {
             </button>
             {isLoading && <LoadingSpinner/>}
             <div>{message}</div>
+            <button
+                className={cls.smallButton}
+                onClick={() => setShowInstruction(prevState => !prevState)}
+            >
+                <h2>?</h2>
+            </button>
+            {
+                showInstruction &&
+				<Modal
+					className={cls.instruction}
+					isOpen={showInstruction}
+					onClose={() => setShowInstruction(false)}
+				>
+					<Instruction onClose={() => setShowInstruction(false)}/>
+				</Modal>}
         </VStack>
     );
 });

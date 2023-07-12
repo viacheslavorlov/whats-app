@@ -32,6 +32,7 @@ export const Contacts = memo((props: ContactsProps) => {
 
     return (
         <VStack max gap="8" justify={'center'} align={'center'} className={classNames(cls.Contacts, {}, [className])}>
+            <p className={cls.instruction}>Введие номер абонента в формате 71234567890 (без "+" в начале)</p>
             <input
                 className={cls.input}
                 type="text"
